@@ -55,8 +55,8 @@ def dashboard():
 
     # day metrics data
     date=[i[0] for i in profit_p_day]
-    p_day=[i[1] for i in profit_p_day]
-    s_day=[i[1] for i in sales_p_day]
+    p_day=[ float(i[1]) for i in profit_p_day]
+    s_day=[ float(i[1]) for i in sales_p_day]
 
     return render_template('dashboard.html',product_name=product_name,p_profit=p_profit,p_sales=p_sales,date=date,p_day=p_day,s_day=s_day)
 
