@@ -1,4 +1,5 @@
 import psycopg2
+from datetime import datetime
 
 conn=psycopg2.connect(user='postgres',password='leshan1234',host='localhost',port='5432',database='myduka_project'  )
 
@@ -19,8 +20,10 @@ def insert_products(values):
     cur.execute(insert,values)
     conn.commit()
 
+# time=datetime.now()
+
 def insert_sales(values):
-    insert="insert into sales(productsid,quantity,created_at)values(%s,%s,'now()')"
+    insert="insert into sales(productsid,quantity,created_at)values(%s,%s,now())"
     cur.execute(insert,values)
     conn.commit()
 
@@ -30,7 +33,7 @@ def profit_per_product():
     return profit_per_product
 
 profit_product=profit_per_product()
-print(profit_product)
+# print(profit_product)
 
 def profit_per_day():
     cur.execute("select sales.created_at, sum((products.selling_price-products.buying_price)*sales.quantity) as profit from products join sales on products.productsid=sales.productsid group by (sales.created_at);")
@@ -38,6 +41,22 @@ def profit_per_day():
     return profit_per_day
 
 profit_day=profit_per_day()
-print(profit_day)
+# print(profit_day)
 
+
+def sales_per_product():
+    cur.execute("select products.productname, sum(products.selling_price*sales.quantity) as total_sales from products join sales on products.productsid=sales.productsid group by (products.productname);")
+    sales_per_product=cur.fetchall()
+    return sales_per_product
+
+sales_product=sales_per_product()
+# print(sales_product)
+
+def sales_per_day():
+    cur.execute("select sales.created_at, sum(products.selling_price*sales.quantity) as total_sales from sales join products on products.productsid=sales.productsid group by(sales.created_at);")
+    sales_per_day=cur.fetchall()
+    return sales_per_day
+
+sales_day=sales_per_day()
+# print(sales_day)
 
