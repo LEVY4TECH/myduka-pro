@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %} Sample page {% endblock %}
+
+{% block content %}
+
+
+
+
+ <p>Welcome to my Sample Page</p>
+
+
+
+
+{% endblock%}
+
+
+
+<!-- In main.py-->
+
+app.route('/sample.html')
+def sample page()
+    return render template("sample.html")

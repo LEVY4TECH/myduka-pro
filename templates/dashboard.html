@@ -43,18 +43,21 @@
     integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
     crossorigin="anonymous"></script>
 
-    <p>{{product_name}}</p>
-    <p>{{p_profit}}</p>
-    <p>{{p_sales}}</p>
+  <p>{{product_name}}</p>
+  <p>{{p_profit}}</p>
+  <p>{{p_sales}}</p>
 
-    <p>{{date}}</p>
-    <p>{{p_day}}</p>
-    <p>{{s_day}}</p>
+  <p>{{date}}</p>
+  <p>{{p_day}}</p>
+  <p>{{s_day}}</p>
   <div>
     <canvas id="bar-chart" width="800" height="450"></canvas>
   </div>
   <div>
     <canvas id="line-chart" width="800" height="450"></canvas>
+  </div>
+  <div>
+    <canvas id="pie-chart" width="800" height="450"></canvas>
   </div>
 
 
@@ -64,55 +67,74 @@
     new Chart(document.getElementById("bar-chart"), {
       type: 'bar',
       data: {
-        labels: {{product_name | safe}},     // x-axis
-        datasets: [
-          // y-axis 
-          {
-            label:"sales per product",
-            backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
-            data:{{p_sales | safe}}
+        labels: {{ product_name | safe}},     // x-axis
+      datasets: [
+      // y-axis 
+      {
+        label: "sales per product",
+        backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850", "#3B3758", "#025CFE", "#FF71F2"],
+        data: {{ p_sales | safe}}
           },
-          {
-            label:"profit per product",
-            backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
-            data: {{p_profit | safe}}
+      {
+        label: "profit per product",
+        backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850", "#3B3758", "#025CFE", "#FF71F2"],
+        data: {{ p_profit | safe}}
           }
-        ]
+    ]
       },
       options: {
-        legend: { display: false },
-        title: {
-          display: true,
-          text: 'Sales and Profit per Product'
-        }
+      legend: { display: false },
+      title: {
+        display: true,
+        text: 'Sales and Profit per Product'
       }
+    }
     });
 
 
     new Chart(document.getElementById("line-chart"), {
-  type: 'line',
-  data: {
-    labels: {{date | safe}},
-    datasets: [{ 
-        data: {{p_day | safe}},
-        label: "profit per day",
-        borderColor: "#3e95cd",
-        fill: false
-      }, { 
-        data: {{s_day | safe}},
-        label: "sales per day",
-        borderColor: "#8e5ea2",
-        fill: false
-      }, 
+      type: 'line',
+      data: {
+        labels: {{ date | safe}},
+      datasets: [{
+        data: {{ p_day | safe}},
+      label: "profit per day",
+      borderColor: "#3e95cd",
+      fill: false
+      }, {
+        data: {{ s_day | safe}},
+      label: "sales per day",
+      borderColor: "#8e5ea2",
+      fill: false
+      },
     ]
   },
-  options: {
-    title: {
-      display: true,
-      text: 'profit and sales per day'
+      options: {
+      title: {
+        display: true,
+        text: 'profit and sales per day'
+      }
     }
-  }
 });
+
+
+    new Chart(document.getElementById("pie-chart"), {
+      type: 'pie',
+      data: {
+        labels: {{product_name | safe}},
+        datasets: [{
+          label: "Profit per product",
+          backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850", "#3B3758", "#025CFE", "#FF71F2"],
+          data: {{p_profit | safe}}
+        }]
+      },
+      options: {
+        title: {
+          display: true,
+          text: 'Profit per product PIE CHART'
+        }
+      }
+    });
   </script>
 
 

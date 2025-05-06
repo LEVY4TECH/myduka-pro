@@ -54,7 +54,7 @@ def dashboard():
     p_sales=[ float(i[1]) for i in sales_p_product]
 
     # day metrics data
-    date=[i[0] for i in profit_p_day]
+    date=[ str(i[0]) for i in profit_p_day]
     p_day=[ float(i[1]) for i in profit_p_day]
     s_day=[ float(i[1]) for i in sales_p_day]
 
