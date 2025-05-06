@@ -60,3 +60,17 @@ def sales_per_day():
 sales_day=sales_per_day()
 # print(sales_day)
 
+
+def check_user(email):
+    query=("select * from users where email=%s")
+    cur.execute(query,(email,))  #the comma is to for python to treat it as a tupple
+    user=cur.fetchall()
+    return user 
+
+def insert_users(values):
+    insert="insert into users(firstname,lastname,email,phone_number,password)values(%s,%s,%s,%s,%s)"
+    cur.execute=(insert,values)
+    conn.commit()
+    cur.close
+
+
