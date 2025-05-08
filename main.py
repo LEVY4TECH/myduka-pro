@@ -1,16 +1,29 @@
-from flask import Flask,render_template,request,redirect,url_for
+from flask import Flask,render_template,request,redirect,url_for,flash,session
 
 from database import fetch_products,fetch_sales,insert_products,insert_sales,profit_per_product,profit_per_day,sales_per_product,sales_per_day,check_user,insert_users
 
 from flask_bcrypt import Bcrypt
 
+from functools import wraps  #decorator function
+
 app=Flask(__name__)
+app.secret_key='kkkl'
 
 bcrypt=Bcrypt(app)
 
 @app.route('/')
 def home():
     return render_template('index.html')
+
+
+def login_required(f):
+    @wraps(f)
+    def protected(*args, **kwargs):
+        if 'email' not in session:
+            return redirect(url_for('login'))
+        return f(*args,**kwargs)
+    return protected 
+
 
 @app.route('/products')
 def products():
@@ -43,6 +56,7 @@ def make_sales():
     return redirect(url_for('sales'))
 
 @app.route('/dashboard')
+@login_required
 def dashboard():
     profit_p_product= profit_per_product()
     sales_p_product=sales_per_product()
@@ -61,6 +75,8 @@ def dashboard():
     date=[ str(i[0]) for i in profit_p_day]
     p_day=[ float(i[1]) for i in profit_p_day]
     s_day=[ float(i[1]) for i in sales_p_day]
+
+    
 
     return render_template('dashboard.html',product_name=product_name,p_profit=p_profit,p_sales=p_sales,date=date,p_day=p_day,s_day=s_day)
 
@@ -101,13 +117,18 @@ def login():
 
         
         if not user:
+            flash("User not found, please register","error")
             return redirect(url_for('register'))
         else:
             if bcrypt.check_password_hash(user[-1],password):
+                flash("Logged in","success")
+                session['email'] = email
                 
                 return redirect(url_for('dashboard'))
             else:
-                print('wrong password')
+                flash("Passwords mismatch","error")
+                # print('passwords mismatch')
+                return redirect(url_for('login'))
                 
     return render_template('login.html')
         
