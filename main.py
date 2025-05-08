@@ -71,17 +71,17 @@ def dashboard():
 @app.route('/register',methods=['GET','POST'])
 def register():
     if request.method=='POST':
-        firstName=request.form['f_name']
-        lastName=request.form['l_name']
+        firstname=request.form['f_name']
+        lastname=request.form['l_name']
         email=request.form['email']
         phone_number=request.form['p_num']
         password=request.form['pass']
 
         hashed_password=bcrypt.generate_password_hash(password).decode('utf-8')
         user=check_user(email)
-        print(user)
+        
         if not user:
-            new_user=(firstName,lastName,phone_number,email,hashed_password)
+            new_user=(firstname,lastname,email,phone_number,hashed_password)
             insert_users(new_user)
             return redirect(url_for('login'))
         else:
@@ -99,14 +99,16 @@ def login():
         user=check_user(email)
 
 
-        print(user)
+        
         if not user:
-            return redirect(url_for('home'))
+            return redirect(url_for('register'))
         else:
             if bcrypt.check_password_hash(user[-1],password):
+                
                 return redirect(url_for('dashboard'))
             else:
                 print('wrong password')
+                
     return render_template('login.html')
         
 

@@ -62,8 +62,8 @@ sales_day=sales_per_day()
 
 
 def check_user(email):
-    query = "select * from users where email= %s"
-    cur.execute(query,(email,))  #the comma is to for python to treat it as a tupple
+    query = "select * from users where email = %s"
+    cur.execute(query,(email,))  
     user=cur.fetchone()
     return user 
 
