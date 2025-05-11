@@ -121,21 +121,35 @@
     new Chart(document.getElementById("pie-chart"), {
       type: 'pie',
       data: {
-        labels: {{product_name | safe}},
-        datasets: [{
-          label: "Profit per product",
-          backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850", "#3B3758", "#025CFE", "#FF71F2"],
-          data: {{p_profit | safe}}
+        labels: {{ product_name | safe}},
+      datasets: [{
+        label: "Profit per product",
+        backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850", "#3B3758", "#025CFE", "#FF71F2"],
+        data: {{ p_profit | safe}}
         }]
       },
       options: {
-        title: {
-          display: true,
-          text: 'Profit per product PIE CHART'
-        }
+      title: {
+        display: true,
+        text: 'Profit per product PIE CHART'
       }
+    }
     });
   </script>
+
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+
+  {% for category, message in messages %}
+  <div class="alert alert-{{category}} alert-dismissable" role="alert">
+    {{message}}
+    <button type="button" class="btn btn-close" data-bs-dismiss="alert"></button>
+  </div>
+  {% endfor %}
+
+  {% endif %}
+  {% endwith %}
 
 
 
