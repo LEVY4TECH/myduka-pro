@@ -1,6 +1,6 @@
 from flask import Flask,render_template,request,redirect,url_for,flash,session
 
-from database import fetch_products,fetch_sales,insert_products,insert_sales,profit_per_product,profit_per_day,sales_per_product,sales_per_day,check_user,insert_users
+from database import fetch_products,fetch_sales,insert_products,insert_sales,profit_per_product,profit_per_day,sales_per_product,sales_per_day,check_user,insert_users,fetch_stock,add_stock
 
 from flask_bcrypt import Bcrypt
 
@@ -36,8 +36,8 @@ def add_products():
         productName=request.form['p_name']
         buying_price=request.form['b_price']
         selling_price=request.form['s_price']
-        stock_quantity=request.form['s_quantity']
-        new_product=(productName,buying_price,selling_price,stock_quantity)
+        
+        new_product=(productName,buying_price,selling_price)
         insert_products(new_product)
         return redirect(url_for('products'))
     
@@ -131,6 +131,23 @@ def login():
                 return redirect(url_for('login'))
                 
     return render_template('login.html')
+
+@app.route('/stock')
+def stock():
+    products=fetch_products()
+    stock=fetch_stock()
+    return render_template('stock.html',products=products,stock=stock)
+
+@app.route('/add_stock',methods=['GET','POST'])
+def add_stock():
+    if request.method=='POST':
+        pid=request.form['pid']
+        quantity=request.form['quantity']
+        new_stock=(pid,quantity)
+        add_stock(new_stock)
+        return redirect(url_for('stock'))
+    
+
         
 
 
