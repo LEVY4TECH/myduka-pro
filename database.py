@@ -33,7 +33,7 @@ def insert_sales(values):
     cur.execute(insert,values)
     conn.commit()
 
-def add_stock(values):
+def insert_stock(values):
     insert="insert into stocksss(pid,stock_quantity,created_at)values(%s,%s,now())"
     cur.execute(insert,values)
     conn.commit()
@@ -82,6 +82,15 @@ def insert_users(values):
     insert="insert into usersss(firstname, lastname, email, phone_number, password)values(%s, %s, %s, %s, %s)"
     cur.execute(insert,values)
     conn.commit()
+
+
+def available_stock(pid):
+    cur.execute("select sum(stock_quantity) from stocksss where pid = %s",(pid,))
+    total_stock=cur.fetchone()[0]
+    # return total_stock
+    cur.execute("select sum(salesss.quantity) from salesss where pid = %s",(pid,))
+    total_sold=cur.fetchone()[0] or 0
+    return total_stock-total_sold
   
 
 

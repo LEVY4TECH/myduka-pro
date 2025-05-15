@@ -1,6 +1,6 @@
 from flask import Flask,render_template,request,redirect,url_for,flash,session
 
-from database import fetch_products,fetch_sales,insert_products,insert_sales,profit_per_product,profit_per_day,sales_per_product,sales_per_day,check_user,insert_users,fetch_stock,add_stock
+from database import fetch_products,fetch_sales,insert_products,insert_sales,profit_per_product,profit_per_day,sales_per_product,sales_per_day,check_user,insert_users,fetch_stock,insert_stock,available_stock
 
 from flask_bcrypt import Bcrypt
 
@@ -52,7 +52,11 @@ def make_sales():
     productsid=request.form['pid']
     quantity=request.form['quantity']
     new_sale=(productsid,quantity)
+    stock_available=available_stock(productsid)
+    if stock_available < float(quantity):
+        flash("Insufficient stock","info")
     insert_sales(new_sale)
+    flash("sale succesfully made","success")
     return redirect(url_for('sales'))
 
 @app.route('/dashboard')
@@ -144,7 +148,8 @@ def add_stock():
         pid=request.form['pid']
         quantity=request.form['quantity']
         new_stock=(pid,quantity)
-        add_stock(new_stock)
+        insert_stock(new_stock)
+        flash("stock added succesfully","success")
         return redirect(url_for('stock'))
     
 
